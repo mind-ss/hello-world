@@ -1,6 +1,9 @@
 import type { Template } from '../types/thumbnail.types';
 import { minimalTemplates } from './minimal';
 import { impactTemplates } from './impact';
+import { dynamicTemplates } from './dynamic';
+import { professionalTemplates } from './professional';
+import { storytellingTemplates } from './storytelling';
 
 /**
  * 모든 템플릿 배열
@@ -8,6 +11,9 @@ import { impactTemplates } from './impact';
 export const allTemplates: Template[] = [
   ...minimalTemplates,
   ...impactTemplates,
+  ...dynamicTemplates,
+  ...professionalTemplates,
+  ...storytellingTemplates,
 ];
 
 /**
@@ -39,3 +45,6 @@ export function getTemplatesByStyle(style: string): Template[] {
 // 개별 템플릿 export
 export * from './minimal';
 export * from './impact';
+export * from './dynamic';
+export * from './professional';
+export * from './storytelling';

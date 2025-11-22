@@ -4,6 +4,8 @@ import { ThumbnailCanvas, type ThumbnailCanvasRef } from './components/Thumbnail
 import { TextEditor } from './components/TextEditor';
 import { TemplateSelector } from './components/TemplateSelector';
 import { ExportPanel } from './components/ExportPanel';
+import { BatchGenerator } from './components/BatchGenerator';
+import { BatchPreview } from './components/BatchPreview';
 import { allTemplates, getDefaultTemplate } from './templates';
 import type { ThumbnailConfig } from './types/thumbnail.types';
 
@@ -15,6 +17,7 @@ function App() {
     width: 1280,
     height: 720,
   });
+  const [batchConfigs, setBatchConfigs] = useState<ThumbnailConfig[] | null>(null);
 
   const canvasRef = useRef<ThumbnailCanvasRef>(null);
 
@@ -31,6 +34,14 @@ function App() {
       ...prev,
       template,
     }));
+  };
+
+  const handleBatchGenerate = (configs: ThumbnailConfig[]) => {
+    setBatchConfigs(configs);
+  };
+
+  const handleCloseBatch = () => {
+    setBatchConfigs(null);
   };
 
   return (
@@ -82,6 +93,13 @@ function App() {
                 onSelectTemplate={handleTemplateChange}
               />
             </div>
+
+            {/* A/B 테스트 배치 생성 */}
+            <BatchGenerator
+              templates={allTemplates}
+              title={title}
+              onGenerate={handleBatchGenerate}
+            />
 
             {/* 내보내기 */}
             <ExportPanel
@@ -149,6 +167,15 @@ function App() {
           </div>
         </div>
       </main>
+
+      {/* 배치 프리뷰 모달 */}
+      {batchConfigs && (
+        <BatchPreview
+          thumbnails={batchConfigs}
+          baseFilename={title.replace(/[^a-zA-Z0-9가-힣\s]/g, '').replace(/\s+/g, '_').substring(0, 30) || 'thumbnail'}
+          onClose={handleCloseBatch}
+        />
+      )}
 
       {/* 푸터 */}
       <footer className="mt-16 py-8 bg-white border-t border-gray-200">
